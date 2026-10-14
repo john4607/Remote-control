@@ -1,2 +1,2 @@
-1.0.6
+1.0.7
 https://github.com/john4607/Remote-control/releases/latest/download/Remote-control.exe
