@@ -1,0 +1,47 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ios/**'
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Build iOS App (.app)
+        run: |
+          cd ios
+          xcodebuild \
+            -project RemoteControl.xcodeproj \
+            -scheme RemoteControl \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath ./build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean build
+
+      - name: Package Unsigned IPA
+        run: |
+          cd ios
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/RemoteControl.app Payload/
+          zip -r RemoteControl.ipa Payload
+          rm -rf Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RemoteControl-iOS-IPA
+          path: ios/RemoteControl.ipa
+          retention-days: 30
