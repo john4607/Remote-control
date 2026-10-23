@@ -1,0 +1,320 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1001 /* RemoteControlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2001 /* RemoteControlApp.swift */; };
+		1002 /* ServerBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002 /* ServerBookmark.swift */; };
+		1003 /* InputCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2003 /* InputCommand.swift */; };
+		1004 /* ServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2004 /* ServerInfo.swift */; };
+		1005 /* RemoteClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2005 /* RemoteClientService.swift */; };
+		1006 /* BookmarkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2006 /* BookmarkStore.swift */; };
+		1007 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2007 /* ContentView.swift */; };
+		1008 /* ServerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008 /* ServerListView.swift */; };
+		1009 /* AddServerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009 /* AddServerSheet.swift */; };
+		1010 /* RemoteDesktopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2010 /* RemoteDesktopView.swift */; };
+		1011 /* KeyboardToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2011 /* KeyboardToolbarView.swift */; };
+		1012 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2012 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0001 /* RemoteControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2001 /* RemoteControlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteControlApp.swift; sourceTree = "<group>"; };
+		2002 /* ServerBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerBookmark.swift; sourceTree = "<group>"; };
+		2003 /* InputCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommand.swift; sourceTree = "<group>"; };
+		2004 /* ServerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerInfo.swift; sourceTree = "<group>"; };
+		2005 /* RemoteClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteClientService.swift; sourceTree = "<group>"; };
+		2006 /* BookmarkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkStore.swift; sourceTree = "<group>"; };
+		2007 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2008 /* ServerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerListView.swift; sourceTree = "<group>"; };
+		2009 /* AddServerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddServerSheet.swift; sourceTree = "<group>"; };
+		2010 /* RemoteDesktopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDesktopView.swift; sourceTree = "<group>"; };
+		2011 /* KeyboardToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbarView.swift; sourceTree = "<group>"; };
+		2012 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2013 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4001 /* Main Group */ = {
+			isa = PBXGroup;
+			children = (
+				4002 /* RemoteControl */,
+				4003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4002 /* RemoteControl */ = {
+			isa = PBXGroup;
+			children = (
+				2001 /* RemoteControlApp.swift */,
+				2013 /* Info.plist */,
+				2012 /* Assets.xcassets */,
+				4004 /* Models */,
+				4005 /* Services */,
+				4006 /* Views */,
+			);
+			path = RemoteControl;
+			sourceTree = "<group>";
+		};
+		4003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0001 /* RemoteControl.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2002 /* ServerBookmark.swift */,
+				2003 /* InputCommand.swift */,
+				2004 /* ServerInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4005 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2005 /* RemoteClientService.swift */,
+				2006 /* BookmarkStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2007 /* ContentView.swift */,
+				2008 /* ServerListView.swift */,
+				2009 /* AddServerSheet.swift */,
+				2010 /* RemoteDesktopView.swift */,
+				2011 /* KeyboardToolbarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5001 /* RemoteControl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6001 /* Build configuration list for PBXNativeTarget "RemoteControl" */;
+			buildPhases = (
+				7001 /* Sources */,
+				3001 /* Frameworks */,
+				8001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RemoteControl;
+			productName = RemoteControl;
+			productReference = 0001 /* RemoteControl.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					5001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 6002 /* Build configuration list for PBXProject "RemoteControl" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = zh_TW;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				zh_TW,
+				Base,
+			);
+			mainGroup = 4001 /* Main Group */;
+			productRefGroup = 4003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5001 /* RemoteControl */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1012 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1001 /* RemoteControlApp.swift in Sources */,
+				1002 /* ServerBookmark.swift in Sources */,
+				1003 /* InputCommand.swift in Sources */,
+				1004 /* ServerInfo.swift in Sources */,
+				1005 /* RemoteClientService.swift in Sources */,
+				1006 /* BookmarkStore.swift in Sources */,
+				1007 /* ContentView.swift in Sources */,
+				1008 /* ServerListView.swift in Sources */,
+				1009 /* AddServerSheet.swift in Sources */,
+				1010 /* RemoteDesktopView.swift in Sources */,
+				1011 /* KeyboardToolbarView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RemoteControl/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.32;
+				PRODUCT_BUNDLE_IDENTIFIER = com.game.remotecontrol;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RemoteControl/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.32;
+				PRODUCT_BUNDLE_IDENTIFIER = com.game.remotecontrol;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6001 /* Build configuration list for PBXNativeTarget "RemoteControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A003 /* Debug */,
+				A004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6002 /* Build configuration list for PBXProject "RemoteControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A001 /* Debug */,
+				A002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9001 /* Project object */;
+}

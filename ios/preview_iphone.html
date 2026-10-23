@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone 遠端控制 App 介面預覽</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=SF+Pro+Text:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #1a1e2e 0%, #080a10 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 30px 16px;
+    }
+
+    header.preview-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    header.preview-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    header.preview-header p {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    /* Switch buttons at top */
+    .screen-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-btn.active {
+      background: #007aff;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+    }
+
+    /* iPhone Frame */
+    .iphone-wrapper {
+      position: relative;
+      width: 380px;
+      height: 780px;
+      background: #000;
+      border-radius: 54px;
+      box-shadow:
+        0 0 0 4px #2a2e39,
+        0 0 0 10px #12151d,
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(0, 122, 255, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 32px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    .island-camera {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #1a237e 20%, #040817 90%);
+      margin-left: auto;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 28px 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .status-bar-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 2px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    /* Screens Container */
+    .screen-content {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #0a0d17;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      transform: scale(0.97);
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    /* --- Screen 1: Server List --- */
+    .screen-list {
+      overflow-y: auto;
+      padding: 8px 18px 40px;
+    }
+
+    .nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0 18px;
+    }
+
+    .nav-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-add {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #007aff;
+      border: none;
+      color: white;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+    }
+
+    .banner-card {
+      background: linear-gradient(135deg, #131926 0%, #172338 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .banner-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #007aff 0%, #004ecc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 6px 16px rgba(0, 122, 255, 0.35);
+      flex-shrink: 0;
+    }
+
+    .banner-text h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .banner-text p {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    .lan-scan-card {
+      background: rgba(23, 32, 50, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .lan-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .lan-title svg {
+      color: #007aff;
+    }
+
+    .btn-scan {
+      background: transparent;
+      border: none;
+      color: #007aff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title span.count {
+      font-size: 13px;
+      font-weight: 500;
+      color: #64748b;
+    }
+
+    .device-card {
+      background: #131a29;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .device-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 122, 255, 0.15);
+      color: #007aff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .device-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .device-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .device-name {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .tag-mode {
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(0, 122, 255, 0.2);
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .device-address {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .btn-connect {
+      background: #007aff;
+      border: none;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.1s;
+    }
+
+    .btn-connect:active {
+      transform: scale(0.95);
+    }
+
+    .quick-connect-box {
+      background: #131a29;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 16px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-row {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .input-row::placeholder {
+      color: #64748b;
+    }
+
+    .btn-quick-run {
+      background: #007aff;
+      border: none;
+      color: #fff;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /* --- Screen 2: Remote Desktop Screen --- */
+    .screen-desktop {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .desktop-stream {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80') center/cover;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .windows-mockup {
+      width: 90%;
+      height: 60%;
+      background: rgba(20, 24, 35, 0.9);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mock-win-header {
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 4px;
+      font-size: 10px;
+      color: #cbd5e1;
+    }
+
+    .mock-win-dots {
+      display: flex;
+      gap: 4px;
+    }
+    .mock-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #475569;
+    }
+
+    .top-floating-bar {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      right: 14px;
+      height: 42px;
+      background: rgba(14, 18, 30, 0.88);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      z-index: 20;
+    }
+
+    .bar-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .bar-btn.active {
+      background: #007aff;
+    }
+
+    .stats-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .stats-badge .dot {
+      width: 7px;
+      height: 7px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #22c55e;
+    }
+
+    .monitor-picker {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* Trackpad Bottom Dock */
+    .trackpad-dock {
+      position: absolute;
+      bottom: 22px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    .btn-left-click {
+      flex: 1;
+      height: 52px;
+      background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 122, 255, 0.4);
+    }
+
+    .scroll-strip {
+      width: 74px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: ns-resize;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-right-click {
+      width: 76px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* --- Screen 3: Keyboard Drawer --- */
+    .keyboard-drawer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(18, 24, 38, 0.98);
+      backdrop-filter: blur(25px);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px 28px 0 0;
+      padding: 16px 14px 28px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 4px;
+    }
+
+    .drawer-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .type-box-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .type-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #fff;
+      font-size: 12.5px;
+      outline: none;
+    }
+
+    .btn-send {
+      background: #007aff;
+      border: none;
+      color: #fff;
+      padding: 0 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .keys-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .key-btn {
+      height: 36px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .key-btn.active-modifier {
+      background: #007aff;
+      color: #fff;
+      border-color: #38bdf8;
+    }
+
+    .combos-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0;
+    }
+
+    .combos-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .combo-chip {
+      flex-shrink: 0;
+      width: 78px;
+      height: 62px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+    }
+
+    .combo-chip .icon {
+      font-size: 14px;
+    }
+
+    .combo-chip .name {
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .combo-chip .desc {
+      font-size: 9px;
+      color: #94a3b8;
+    }
+
+    /* Modal Sheet Preview */
+    .modal-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 36px;
+      background: #141824;
+      border-radius: 26px 26px 0 0;
+      padding: 16px;
+      box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.8);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sheet-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .sheet-nav h4 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .sheet-nav button {
+      background: transparent;
+      border: none;
+      color: #007aff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .form-group {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+
+    .form-val {
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .mode-toggle-group {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 3px;
+      border-radius: 10px;
+    }
+
+    .mode-opt {
+      flex: 1;
+      text-align: center;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+
+    .mode-opt.selected {
+      background: #007aff;
+      color: white;
+    }
+
+    /* Footer hints */
+    .preview-tips {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #64748b;
+      max-width: 400px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="preview-header">
+    <h1>iPhone 遠端控制 App 介面展示</h1>
+    <p>專為 iOS 設計的極致暗黑玻璃質感遠端桌面控制器</p>
+  </header>
+
+  <!-- Navigation / Tab Selector -->
+  <div class="screen-tabs">
+    <button class="tab-btn active" onclick="switchScreen('list')">1. 主頁面 (設備清單)</button>
+    <button class="tab-btn" onclick="switchScreen('desktop')">2. 遠端桌面 (觸控板)</button>
+    <button class="tab-btn" onclick="switchScreen('keyboard')">3. 鍵盤與快捷工具</button>
+    <button class="tab-btn" onclick="switchScreen('add')">4. 新增設備彈窗</button>
+  </div>
+
+  <!-- Simulated iPhone 16 Pro Frame -->
+  <div class="iphone-wrapper">
+    <!-- Dynamic Island -->
+    <div class="dynamic-island">
+      <div class="island-camera"></div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-bar-icons">
+        <span>5G</span>
+        <svg width="18" height="12" viewBox="0 0 24 16" fill="currentColor">
+          <rect x="1" y="1" width="19" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="3" y="3" width="13" height="10" rx="1.5" fill="currentColor"/>
+          <path d="M22 6v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Screen Content Container -->
+    <div class="screen-content">
+
+      <!-- ================= 畫面 1: 連線主頁面 (ServerListView) ================= -->
+      <div id="screen-list" class="screen screen-list active">
+        <div class="nav-header">
+          <h2 class="nav-title">遠端控制</h2>
+          <button class="btn-add" onclick="switchScreen('add')">+</button>
+        </div>
+
+        <!-- Header Banner -->
+        <div class="banner-card">
+          <div class="banner-icon">🖥️</div>
+          <div class="banner-text">
+            <h3>Windows 遠端控制</h3>
+            <p>在 iPhone 上即時流暢控制您的電腦</p>
+          </div>
+        </div>
+
+        <!-- Wi-Fi Scanner Card -->
+        <div class="lan-scan-card">
+          <div class="lan-title">
+            <span>📶</span>
+            <span>同 Wi-Fi 區域網路快速搜尋</span>
+          </div>
+          <button class="btn-scan" onclick="alert('正在掃描區域網路電腦...')">開始掃描</button>
+        </div>
+
+        <!-- Saved Devices -->
+        <div class="section-title">
+          <span>儲存的電腦設備</span>
+          <span class="count">2 台</span>
+        </div>
+
+        <!-- Device Card 1 -->
+        <div class="device-card">
+          <div class="device-avatar">💻</div>
+          <div class="device-info">
+            <div class="device-name-row">
+              <span class="device-name">書房工作站</span>
+              <span class="tag-mode">觸控板</span>
+            </div>
+            <div class="device-address">192.168.1.105:5000</div>
+          </div>
+          <button class="btn-connect" onclick="switchScreen('desktop')">
+            <span>▶</span> 連線
+          </button>
+        </div>
+
+        <!-- Device Card 2 -->
+        <div class="device-card">
+          <div class="device-avatar">🖥️</div>
+          <div class="device-info">
+            <div class="device-name-row">
+              <span class="device-name">客廳娛樂主機</span>
+              <span class="tag-mode" style="color: #4ade80; background: rgba(74, 222, 128, 0.2);">直觸</span>
+            </div>
+            <div class="device-address">192.168.1.120:5000</div>
+          </div>
+          <button class="btn-connect" onclick="switchScreen('desktop')">
+            <span>▶</span> 連線
+          </button>
+        </div>
+
+        <!-- Quick Direct Connect -->
+        <div class="section-title" style="margin-top: 18px;">
+          <span>快速直接連線</span>
+        </div>
+        <div class="quick-connect-box">
+          <input type="text" class="input-row" placeholder="IP 位址 (例如: 192.168.1.100)">
+          <input type="password" class="input-row" placeholder="臨時連線密碼 (PIN)">
+          <button class="btn-quick-run" onclick="switchScreen('desktop')">立即連線</button>
+        </div>
+      </div>
+
+      <!-- ================= 畫面 2: 遠端桌面控制 (RemoteDesktopView) ================= -->
+      <div id="screen-desktop" class="screen screen-desktop">
+        <!-- Background Stream -->
+        <div class="desktop-stream">
+          <div class="windows-mockup">
+            <div class="mock-win-header">
+              <span>Windows 11 Desktop</span>
+              <div class="mock-win-dots">
+                <div class="mock-dot"></div>
+                <div class="mock-dot"></div>
+                <div class="mock-dot"></div>
+              </div>
+            </div>
+            <div style="font-size: 11px; color: #94a3b8; padding-top: 10px;">
+              📁 檔案總管<br>
+              ⚙️ 設定控制台<br>
+              🌐 瀏覽器視窗 (即時畫面 60 FPS)
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Floating Capsule Bar -->
+        <div class="top-floating-bar">
+          <button class="bar-btn" onclick="switchScreen('list')">✕</button>
+          <div class="stats-badge">
+            <div class="dot"></div>
+            <span>60 FPS • 12ms</span>
+          </div>
+          <div class="monitor-picker">螢幕 1 ▾</div>
+          <button class="bar-btn">🔍</button>
+          <button class="bar-btn active" title="切換觸控板模式">👆</button>
+          <button class="bar-btn" onclick="switchScreen('keyboard')">⌨️</button>
+        </div>
+
+        <!-- Bottom Trackpad Dock -->
+        <div class="trackpad-dock">
+          <button class="btn-left-click" onclick="flashClick(this)">滑鼠左鍵</button>
+          <div class="scroll-strip">
+            ▲<br>滾輪<br>▼
+          </div>
+          <button class="btn-right-click" onclick="flashClick(this)">右鍵</button>
+        </div>
+      </div>
+
+      <!-- ================= 畫面 3: 鍵盤與快捷工具 (KeyboardToolbarView) ================= -->
+      <div id="screen-keyboard" class="screen screen-desktop">
+        <!-- Desktop Stream Background (dimmed) -->
+        <div class="desktop-stream" style="filter: brightness(0.4);">
+          <div class="windows-mockup"></div>
+        </div>
+
+        <!-- Slide-up Keyboard Drawer -->
+        <div class="keyboard-drawer">
+          <div class="drawer-header">
+            <div class="drawer-title">
+              <span>⌨️</span> Windows 鍵盤與快捷工具
+            </div>
+            <button class="bar-btn" onclick="switchScreen('desktop')">✕</button>
+          </div>
+
+          <!-- Direct Typing Input -->
+          <div class="type-box-row">
+            <input type="text" class="type-input" placeholder="點此打字 (支援繁體中文輸入法)...">
+            <button class="btn-send">送出</button>
+          </div>
+
+          <!-- Modifiers Row -->
+          <div class="keys-row">
+            <button class="key-btn active-modifier" onclick="toggleMod(this)">Ctrl</button>
+            <button class="key-btn" onclick="toggleMod(this)">Alt</button>
+            <button class="key-btn" onclick="toggleMod(this)">Shift</button>
+            <button class="key-btn" onclick="toggleMod(this)">Win</button>
+            <button class="key-btn">Esc</button>
+          </div>
+
+          <!-- Navigation Keys -->
+          <div class="keys-row">
+            <button class="key-btn">Tab</button>
+            <button class="key-btn">Enter</button>
+            <button class="key-btn">退格</button>
+            <button class="key-btn">Del</button>
+            <button class="key-btn">空白</button>
+          </div>
+
+          <!-- Arrow Keys -->
+          <div class="keys-row">
+            <button class="key-btn">←</button>
+            <button class="key-btn">↑</button>
+            <button class="key-btn">↓</button>
+            <button class="key-btn">→</button>
+            <button class="key-btn">F5</button>
+          </div>
+
+          <!-- Horizontal Combos Scroll -->
+          <div class="combos-scroll">
+            <div class="combo-chip">
+              <span class="icon">🪟</span>
+              <span class="name">Win + D</span>
+              <span class="desc">顯示桌面</span>
+            </div>
+            <div class="combo-chip">
+              <span class="icon">🔀</span>
+              <span class="name">Alt + Tab</span>
+              <span class="desc">切換視窗</span>
+            </div>
+            <div class="combo-chip">
+              <span class="icon">📋</span>
+              <span class="name">Ctrl + C</span>
+              <span class="desc">複製</span>
+            </div>
+            <div class="combo-chip">
+              <span class="icon">📄</span>
+              <span class="name">Ctrl + V</span>
+              <span class="desc">貼上</span>
+            </div>
+            <div class="combo-chip">
+              <span class="icon">📊</span>
+              <span class="name">工作管理員</span>
+              <span class="desc">Ctrl+Shift+Esc</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 畫面 4: 新增設備彈窗 (AddServerSheet) ================= -->
+      <div id="screen-add" class="screen screen-list">
+        <!-- Background Dimmed List -->
+        <div class="nav-header" style="opacity: 0.3;">
+          <h2 class="nav-title">遠端控制</h2>
+        </div>
+
+        <!-- Sheet Modal Container -->
+        <div class="modal-sheet">
+          <div class="sheet-nav">
+            <button onclick="switchScreen('list')">取消</button>
+            <h4>新增電腦連線</h4>
+            <button onclick="switchScreen('list')" style="font-weight: 700;">儲存</button>
+          </div>
+
+          <div class="form-group">
+            <span class="form-label">電腦名稱</span>
+            <span class="form-val">書房電腦</span>
+          </div>
+
+          <div class="form-group">
+            <span class="form-label">IP 位址 / 主機名稱</span>
+            <span class="form-val">192.168.1.105</span>
+          </div>
+
+          <div class="form-group">
+            <span class="form-label">通訊埠 (Port)</span>
+            <span class="form-val">5000</span>
+          </div>
+
+          <div class="form-group">
+            <span class="form-label">安全密碼 (PIN)</span>
+            <span class="form-val">••••••</span>
+          </div>
+
+          <div class="form-group">
+            <span class="form-label" style="margin-bottom: 8px;">操作偏好模式</span>
+            <div class="mode-toggle-group">
+              <div class="mode-opt selected">🖱️ 觸控板模式</div>
+              <div class="mode-opt">👆 直觸螢幕模式</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Home Bar Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <p class="preview-tips">
+    💡 提示：點擊上方切換標籤或畫面中「連線」、「鍵盤 ⌨️」、「+」按鈕，即可即時體驗各畫面的互動效果。
+  </p>
+
+  <script>
+    function switchScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+      const target = document.getElementById('screen-' + id);
+      if (target) target.classList.add('active');
+
+      const tabs = {
+        'list': 0,
+        'desktop': 1,
+        'keyboard': 2,
+        'add': 3
+      };
+      const buttons = document.querySelectorAll('.tab-btn');
+      if (buttons[tabs[id]]) {
+        buttons[tabs[id]].classList.add('active');
+      }
+    }
+
+    function toggleMod(btn) {
+      btn.classList.toggle('active-modifier');
+    }
+
+    function flashClick(btn) {
+      btn.style.transform = 'scale(0.95)';
+      setTimeout(() => btn.style.transform = 'scale(1)', 100);
+    }
+  </script>
+</body>
+</html>
